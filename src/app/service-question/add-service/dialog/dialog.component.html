@@ -1,0 +1,64 @@
+<mat-progress-bar mode="determinate" [value]="curProgress"></mat-progress-bar>
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="serviceSelctGroup">
+    <form [formGroup]="serviceSelctGroup">
+      <ng-template matStepLabel>Select your Service</ng-template>
+      <mat-form-field>
+        <mat-label *ngIf="!loadingServices">Select your service type:</mat-label>
+        <mat-label *ngIf="loadingServices">Loading services...</mat-label>
+        <mat-select formControlName="newService" name="services">
+          <mat-option [value]="service.key" *ngFor="let service of services">
+            {{service.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div>
+        <button mat-stroked-button (click)="getQuestion(stepper)" color="primary">Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="item" *ngFor="let form of dynamicForms; let i = index">
+    <span>Question {{i + 1}}</span>
+    <form [formGroup]="form" class="inner-content">
+      <ng-container [ngSwitch]="totalQuestions[i].type">
+        <mat-form-field *ngSwitchCase="'string'">
+          <mat-label>{{totalQuestions[i].title}}</mat-label>
+          <input matInput type="text" formControlName="form" [placeholder]="totalQuestions[i].placeholder"/>
+          <mat-error *ngIf="!form.required">{{totalQuestions[i].title + ' required.'}}</mat-error>
+        </mat-form-field>
+        <mat-form-field *ngSwitchCase="'email'">
+          <mat-label>{{totalQuestions[i].title}}</mat-label>
+          <input matInput type="email" formControlName="form" [placeholder]="totalQuestions[i].placeholder"/>
+          <mat-error *ngIf="!form.required">{{totalQuestions[i].title + ' required.'}}</mat-error>
+        </mat-form-field>
+        <mat-form-field *ngSwitchCase="'textarea'">
+          <mat-label>{{totalQuestions[i].title}}</mat-label>
+          <textarea matInput rows="8" type="email" formControlName="form" [placeholder]="totalQuestions[i].placeholder"></textarea>
+          <mat-error *ngIf="!form.required">{{totalQuestions[i].title + ' required.'}}</mat-error>
+        </mat-form-field>
+        <mat-form-field *ngSwitchCase="'date'">
+          <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="form">
+          <mat-datepicker-toggle matSuffix [for]='picker'>
+            <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-radio-group *ngSwitchCase="'radios'" formControlName="form">
+          <mat-radio-button *ngFor="let option of totalQuestions[i].options" [value]="option.value">{{option.name}}</mat-radio-button>
+        </mat-radio-group>
+      </ng-container>
+    </form>
+    <div class="step-actions">
+      <button mat-stroked-button matStepperPrevious (click)="onPrev(stepper)" color="primary">Back</button>
+      <button mat-stroked-button matStepperNext [disabled]="form.invalid" (click)="onNext(stepper)" color="primary">Next</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Finished</ng-template>
+    <span>Get Quotes.</span>
+    <div class="step-actions">
+      <button mat-stroked-button matStepperPrevious (click)="onPrev(stepper)">Back</button>
+      <button mat-stroked-button color="primary" (click)="onSubmit()">Submit</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

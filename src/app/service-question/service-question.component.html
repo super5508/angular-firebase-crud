@@ -1,0 +1,16 @@
+<mat-drawer-container autosize fullscreen>
+  <mat-drawer mode="over" #drawer>
+    <mat-list>
+      <mat-list-item>
+        <button mat-button routerLink="/" (click)="drawer.close()">
+          <mat-icon class="menu-icon">add_circle</mat-icon>
+          <span>Add new service</span>
+        </button>
+      </mat-list-item>
+    </mat-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <app-appbar [drawer]="drawer"></app-appbar>
+    <router-outlet></router-outlet>
+  </mat-drawer-content>
+</mat-drawer-container>
