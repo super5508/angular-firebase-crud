@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AppbarComponent } from './appbar.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AppbarComponent', () => {
   let component: AppbarComponent;
@@ -8,7 +11,9 @@ describe('AppbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppbarComponent ]
+      declarations: [ AppbarComponent ],
+      schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
+      imports: [ SharedModule, RouterTestingModule ],
     })
     .compileComponents();
   }));
